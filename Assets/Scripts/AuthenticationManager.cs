@@ -49,5 +49,7 @@ public class AuthenticationManager : MonoBehaviour
         }
 
         await ApiManager.Instance.Register(registerUsername.text, registerPassword.text);
+
+        gameObject.SetActive(false);
     }
 }

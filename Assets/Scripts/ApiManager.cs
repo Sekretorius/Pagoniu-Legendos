@@ -14,6 +14,8 @@ public class ApiManager : MonoBehaviour
 
     private static ApiManager instance;
 
+    private Token token;
+
     public static ApiManager Instance
     {
         get
@@ -39,7 +41,12 @@ public class ApiManager : MonoBehaviour
     /// <returns></returns>
     public async UniTask<string> Login(string username, string password)
     {
-        return await GetTextAsync(WebRequests.Login + $"{username}/{password}");
+        WWWForm form = new WWWForm();
+        form.AddField("username", username);
+        form.AddField("password", password);
+
+        return await GetTextAsync(WebRequests.Login, form);
+        //return await GetTextAsync(WebRequests.Login, "{\"username\":\"Jonas\",\"password\":\"Paulius\"}");
     }
 
     /// <summary>
@@ -50,20 +57,38 @@ public class ApiManager : MonoBehaviour
     /// <returns></returns>
     public async UniTask<string> Register(string username, string password)
     {
-        return await GetTextAsync(WebRequests.Register + $"{username}/{password}");
+        WWWForm form = new WWWForm();
+        form.AddField("username", username);
+        form.AddField("password", password);
+
+        return await GetTextAsync(WebRequests.Register, form);
+       // return await GetTextAsync(WebRequests.Register, "{\"username\":\"Jonas\",\"password\":\"Paulius\"}");
     }
 
     public async UniTask<string> GetTextAsync(string request)
     {
         UnityWebRequest req = UnityWebRequest.Get(request);
-        req.SetRequestHeader(HeaderName, HeaderValue);
+        req.SetRequestHeader(HeaderName, token != null ? "Bearer " + token.token : string.Empty);
         var result = await req.SendWebRequest();
 
         Console.Instance.Print($"{request} : {result.result}");
         Console.Instance.Print(result.downloadHandler.text,"red");
 
         return result.downloadHandler.text;
+    }
 
+    public async UniTask<string> GetTextAsync(string request, WWWForm form)
+    {
+        UnityWebRequest req = UnityWebRequest.Post(request,form);
+
+        var result = await req.SendWebRequest();
+
+        Console.Instance.Print($"{request} : {result.result}");
+        Console.Instance.Print(result.downloadHandler.text, "red");
+
+        token = JsonUtility.FromJson<Token>(result.downloadHandler.text);
+
+        return result.downloadHandler.text;
     }
 
 
