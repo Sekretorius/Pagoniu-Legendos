@@ -9,6 +9,9 @@ public class Map : MonoBehaviour
     [SerializeField] private float zoomTime = 5;
     [SerializeField] private float orthoSize = 5;
 
+    [SerializeField] private GameObject createBtn;
+    [SerializeField] private GameObject deleteBtn;
+
     [SerializeField] public GameObject cities;
     [SerializeField] public GameObject cityPrefab;
     [SerializeField] public Bounds bounds;
@@ -34,7 +37,7 @@ public class Map : MonoBehaviour
     public async void Init()
     {
         await GetBases();
-        GameManager.Instance.DisableIfHasBase();
+        DisableIfHasBase();
         SpawnCities();
         StartCoroutine(ZoomIn());
     }
@@ -78,5 +81,56 @@ public class Map : MonoBehaviour
         bases = JsonHelper.FromJson<Base>(gameBases); 
     }
 
+    public void DisableIfHasBase()
+    {
+        int id = ApiManager.Instance.token.user.id;
+        foreach (Base pBase in Map.Instance.bases)
+            if (pBase.client_id == id)
+            {
+                createBtn.SetActive(false);
+                deleteBtn.SetActive(true);
+                Map.Instance.playerBase = pBase;
+                return;
+            }
+        createBtn.SetActive(true);
+        deleteBtn.SetActive(false);
+    }
+    public void CreateBase()
+    {
+        InitNewBase();
+    }
+
+    public void DeleteBase()
+    {
+        DeletePlayerBase();
+    }
+
+    public async UniTask DeletePlayerBase()
+    {
+        deleteBtn.SetActive(false);
+        await ApiManager.Instance.DeleteBase(Map.Instance.playerBase.id);
+        await RefreshBases();
+        DisableIfHasBase();
+    }
+
+    public async UniTask InitNewBase()
+    {
+        Bounds bounds = Map.Instance.bounds;
+        int x = Mathf.RoundToInt(Random.Range(-bounds.extents.x, bounds.extents.x));
+        int y = Mathf.RoundToInt(Random.Range(-bounds.extents.y, bounds.extents.y));
+
+        Base playerBase = new Base(0, ApiManager.Instance.token.user.id, 1, x, y);
+
+        createBtn.SetActive(false);
+        await ApiManager.Instance.AddBase(playerBase);
+        await RefreshBases();
+        DisableIfHasBase();
+    }
+
+    public async UniTask RefreshBases()
+    {
+        await Map.Instance.GetBases();
+        Map.Instance.SpawnCities();
+    }
 
 }

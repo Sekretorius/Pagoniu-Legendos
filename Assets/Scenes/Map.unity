@@ -141,7 +141,7 @@ PrefabInstance:
     - target: {fileID: 3123766337088932165, guid: 1ef7e70f2e4d68b458ced987644bfb53, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 706867326}
+      objectReference: {fileID: 779035369}
     - target: {fileID: 3123766337088932165, guid: 1ef7e70f2e4d68b458ced987644bfb53, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -152,7 +152,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3123766337088932165, guid: 1ef7e70f2e4d68b458ced987644bfb53, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Assembly-CSharp
+      value: Map, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3123766337088932165, guid: 1ef7e70f2e4d68b458ced987644bfb53, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -395,8 +395,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7eb5890f8963a84d9f00a3c894261b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  createBtn: {fileID: 6613155763592625318}
-  deleteBtn: {fileID: 335383089}
 --- !u!4 &706867327
 Transform:
   m_ObjectHideFlags: 0
@@ -443,6 +441,8 @@ MonoBehaviour:
   _camera: {fileID: 519420031}
   zoomTime: 2.5
   orthoSize: 7
+  createBtn: {fileID: 6613155763592625318}
+  deleteBtn: {fileID: 335383089}
   cities: {fileID: 1854617871}
   cityPrefab: {fileID: 3108909689682393337, guid: 989820b24a214ab44be081c754535f52, type: 3}
   bounds:
@@ -941,7 +941,7 @@ PrefabInstance:
     - target: {fileID: 3123766337088932165, guid: 1ef7e70f2e4d68b458ced987644bfb53, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 706867326}
+      objectReference: {fileID: 779035369}
     - target: {fileID: 3123766337088932165, guid: 1ef7e70f2e4d68b458ced987644bfb53, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -952,7 +952,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3123766337088932165, guid: 1ef7e70f2e4d68b458ced987644bfb53, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Assembly-CSharp
+      value: Map, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3123766337088932165, guid: 1ef7e70f2e4d68b458ced987644bfb53, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
