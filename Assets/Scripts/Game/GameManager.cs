@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public Base playerBase;
+
+    public Base currentBase;
+
+    public Building[] buildings;
 
     private static GameManager instance;
     public static GameManager Instance
@@ -19,6 +24,8 @@ public class GameManager : MonoBehaviour
     {
         if (instance == null)
             instance = this;
+
+        DontDestroyOnLoad(this);
     }
 
 }

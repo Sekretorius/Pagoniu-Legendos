@@ -68,9 +68,12 @@ public class Map : MonoBehaviour
 
         for (int i = 0; i < bases.Length; i++)
         {
-            if(bases[i].localPositionX != 0 && bases[i].localPositionY != 0)
-                Instantiate(cityPrefab, cities.transform,false).transform.localPosition =
-                    new Vector3((float)bases[i].localPositionX, (float)bases[i].localPositionY);
+            if (bases[i].localPositionX != 0 && bases[i].localPositionY != 0)
+            {
+                GameObject cityObject = Instantiate(cityPrefab, cities.transform, false);
+                cityObject.transform.localPosition = new Vector3((float)bases[i].localPositionX, (float)bases[i].localPositionY);
+                cityObject.GetComponent<City>().cityBase = bases[i];
+            }
         }
     }
 
@@ -89,7 +92,8 @@ public class Map : MonoBehaviour
             {
                 createBtn.SetActive(false);
                 deleteBtn.SetActive(true);
-                Map.Instance.playerBase = pBase;
+                playerBase = pBase;
+                GameManager.Instance.playerBase = pBase;
                 return;
             }
         createBtn.SetActive(true);

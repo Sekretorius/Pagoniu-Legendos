@@ -395,6 +395,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7eb5890f8963a84d9f00a3c894261b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerBase:
+    id: 0
+    client_id: 0
+    world_section_id: 0
+    localPositionX: 0
+    localPositionY: 0
+  currentBase:
+    id: 0
+    client_id: 0
+    world_section_id: 0
+    localPositionX: 0
+    localPositionY: 0
 --- !u!4 &706867327
 Transform:
   m_ObjectHideFlags: 0
