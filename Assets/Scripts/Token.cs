@@ -48,6 +48,30 @@ public class Base
     }
 }
 
+[Serializable]
+public class Building
+{
+    public int base_id;
+
+    public int localPositionX = 0;
+
+    public int localPositionY = 0;
+
+    public string type;
+
+    public string name;
+
+    public int price;
+
+    public int build_time;
+
+    public bool isBuilt;
+
+    public int health;
+
+    public Building() { }
+}
+
 public static class JsonHelper
 {
     public static T[] FromJson<T>(string json)

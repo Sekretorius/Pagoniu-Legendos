@@ -91,6 +91,15 @@ public class ApiManager : MonoBehaviour
         return await DeleteAsync(WebRequests.Bases + "/" + id);
     }
 
+    /// <summary>
+    /// add base
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask<string> GetBuildings(int baseId)
+    {
+        return await GetTextAsync(WebRequests.GetBase + baseId + "/Buildings");
+    }
+
     public async UniTask<string> GetTextAsync(string request)
     {
         UnityWebRequest req = UnityWebRequest.Get(request);
