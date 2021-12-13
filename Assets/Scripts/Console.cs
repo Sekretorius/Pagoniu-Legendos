@@ -45,6 +45,8 @@ public class Console : MonoBehaviour
     {
         List<ButtonInfo> buttons = new List<ButtonInfo>()
         {
+            new ButtonInfo("GET BASES",WebRequests.GetBases, false),
+            new ButtonInfo("GET BASE",WebRequests.GetBase, true),
             new ButtonInfo("GET USERS",WebRequests.GetUsers, false),
             new ButtonInfo("GET USER",WebRequests.GetUser, true),
         };

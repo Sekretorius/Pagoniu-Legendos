@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AuthenticationManager : MonoBehaviour
 {
@@ -17,6 +18,11 @@ public class AuthenticationManager : MonoBehaviour
     [SerializeField]
     private TMP_InputField loginPassword = default;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(transform.parent);
+    }
+
     public async void Login()
     {
         if(loginUsername.text == "")
@@ -30,9 +36,13 @@ public class AuthenticationManager : MonoBehaviour
             return;
         }
 
-        await ApiManager.Instance.Login(loginUsername.text, loginPassword.text);
+        string result = await ApiManager.Instance.Login(loginUsername.text, loginPassword.text);
 
-        gameObject.SetActive(false);
+        if (result != null)
+        {
+            await SceneManager.LoadSceneAsync(1,LoadSceneMode.Single);
+            gameObject.SetActive(false);
+        }
     }
 
     public async void Register()
@@ -48,8 +58,12 @@ public class AuthenticationManager : MonoBehaviour
             return;
         }
 
-        await ApiManager.Instance.Register(registerUsername.text, registerPassword.text);
+        string result = await ApiManager.Instance.Register(registerUsername.text, registerPassword.text);
 
-        gameObject.SetActive(false);
+        if (result != null)
+        {
+            await SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
+            gameObject.SetActive(false);
+        }
     }
 }

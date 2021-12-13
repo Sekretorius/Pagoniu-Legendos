@@ -12,9 +12,11 @@ public class ApiManager : MonoBehaviour
 
     public string playerID { get; private set; }
 
+    public Token token { get; private set; }
+
+
     private static ApiManager instance;
 
-    private Token token;
 
     public static ApiManager Instance
     {
@@ -41,12 +43,11 @@ public class ApiManager : MonoBehaviour
     /// <returns></returns>
     public async UniTask<string> Login(string username, string password)
     {
-        WWWForm form = new WWWForm();
-        form.AddField("username", username);
-        form.AddField("password", password);
+        Dictionary<string, string> form = new Dictionary<string, string>();
+        form.Add("username", username);
+        form.Add("password", password);
 
         return await GetTextAsync(WebRequests.Login, form);
-        //return await GetTextAsync(WebRequests.Login, "{\"username\":\"Jonas\",\"password\":\"Paulius\"}");
     }
 
     /// <summary>
@@ -57,38 +58,131 @@ public class ApiManager : MonoBehaviour
     /// <returns></returns>
     public async UniTask<string> Register(string username, string password)
     {
-        WWWForm form = new WWWForm();
-        form.AddField("username", username);
-        form.AddField("password", password);
+        Dictionary<string, string> form = new Dictionary<string, string>();
+        form.Add("username", username);
+        form.Add("password", password);
 
         return await GetTextAsync(WebRequests.Register, form);
-       // return await GetTextAsync(WebRequests.Register, "{\"username\":\"Jonas\",\"password\":\"Paulius\"}");
+    }
+
+    /// <summary>
+    /// add base
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask<string> AddBase(Base playerBase)
+    {
+        Dictionary<string,string> form = new Dictionary<string, string>();
+
+        form.Add("localPositionX", playerBase.localPositionX.ToString());
+        form.Add("localPositionY", playerBase.localPositionY.ToString());
+        form.Add("client_id", playerBase.client_id.ToString());
+        form.Add("world_section_id", playerBase.world_section_id.ToString());
+
+
+        return await GetTextAsync(WebRequests.Bases, form);
+    }
+
+    /// <summary>
+    /// delete base
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask<bool> DeleteBase(int id)
+    {
+        return await DeleteAsync(WebRequests.Bases + "/" + id);
     }
 
     public async UniTask<string> GetTextAsync(string request)
     {
         UnityWebRequest req = UnityWebRequest.Get(request);
-        req.SetRequestHeader(HeaderName, token != null ? "Bearer " + token.token : string.Empty);
-        var result = await req.SendWebRequest();
 
-        Console.Instance.Print($"{request} : {result.result}");
-        Console.Instance.Print(result.downloadHandler.text,"red");
+        req.SetRequestHeader("Bearer", token != null ? token.access_token : string.Empty);
+        req.SetRequestHeader("Username", token != null ? token.user.username : string.Empty);
 
-        return result.downloadHandler.text;
+        try
+        {
+            await req.SendWebRequest();
+
+            if (req.result == UnityWebRequest.Result.Success)
+            {
+                Console.Instance.Print($"{request} : {req.result}");
+                Console.Instance.Print(req.downloadHandler.text, "green");
+
+                return req.downloadHandler.text;
+            }
+
+            Console.Instance.Print($"{request} : {req.result}");
+            Console.Instance.Print(req.downloadHandler.text, "red");
+        }
+        catch (UnityWebRequestException e)
+        {
+            Console.Instance.Print(request);
+            Console.Instance.Print(e.Text, "red");
+        }
+
+        return null;
     }
 
-    public async UniTask<string> GetTextAsync(string request, WWWForm form)
+    public async UniTask<string> GetTextAsync(string request, Dictionary<string,string> form)
     {
-        UnityWebRequest req = UnityWebRequest.Post(request,form);
 
-        var result = await req.SendWebRequest();
+        UnityWebRequest req = UnityWebRequest.Post(request, form);
 
-        Console.Instance.Print($"{request} : {result.result}");
-        Console.Instance.Print(result.downloadHandler.text, "red");
+        req.SetRequestHeader("Bearer", token != null ? token.access_token : string.Empty);
+        req.SetRequestHeader("Username", token != null ? token.user.username : string.Empty);
 
-        token = JsonUtility.FromJson<Token>(result.downloadHandler.text);
+        try
+        {
+            await req.SendWebRequest();
 
-        return result.downloadHandler.text;
+            if (req.result == UnityWebRequest.Result.Success)
+            {
+                Console.Instance.Print($"{request} : {req.result}");
+                Console.Instance.Print(req.downloadHandler.text, "green");
+
+                if (token == null)
+                    token = JsonUtility.FromJson<Token>(req.downloadHandler.text);
+
+                return req.downloadHandler.text;
+            }
+
+            Console.Instance.Print($"{request} : {req.result}");
+            Console.Instance.Print(req.downloadHandler.text, "red");
+        }
+        catch (UnityWebRequestException e)
+        {
+            Console.Instance.Print(request);
+            Console.Instance.Print(e.Text, "red");
+        }
+        return null;
+    }
+
+    public async UniTask<bool> DeleteAsync(string request)
+    {
+
+        UnityWebRequest req = UnityWebRequest.Delete(request);
+
+        req.SetRequestHeader("Bearer", token != null ? token.access_token : string.Empty);
+        req.SetRequestHeader("Username", token != null ? token.user.username : string.Empty);
+
+        try
+        {
+            await req.SendWebRequest();
+
+            if (req.result == UnityWebRequest.Result.Success)
+            {
+                Console.Instance.Print($"{request} : {req.result}");
+                return true;
+            }
+
+            Console.Instance.Print($"{request} : {req.result}");
+            Console.Instance.Print(req.downloadHandler.text, "red");
+        }
+        catch (UnityWebRequestException e)
+        {
+            Console.Instance.Print(request);
+            Console.Instance.Print(e.Text, "red");
+        }
+        return false;
     }
 
 
