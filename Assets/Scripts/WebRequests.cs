@@ -14,4 +14,6 @@ public static class WebRequests
     public const string GetBases = Prefix + "Bases";
     public const string AddBase = Prefix + "Bases";
     public const string Bases = Prefix + "Bases";
+    public const string Worlds = Prefix + "Worlds";
+    public const string WorldSections = Prefix + "WorldSections";
 }

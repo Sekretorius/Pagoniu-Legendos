@@ -14,6 +14,23 @@ public class Token
     public string refresh_token;
 }
 
+
+[Serializable]
+public class World
+{
+    public int id;
+}
+
+
+[Serializable]
+public class WorldSection
+{
+    public int id;
+    public int worldPositionX;
+    public int worldPositionY;
+    public int world_id;
+}
+
 [Serializable]
 public class User
 {
@@ -27,7 +44,6 @@ public class User
 [Serializable]
 public class Base
 {
-
     public int id;
 
     public int client_id;
@@ -45,6 +61,10 @@ public class Base
         this.world_section_id = world_section_id;
         this.localPositionX = localPositinionX;
         this.localPositionY = localPositinionY;
+    }
+    public Base()
+    {
+
     }
 }
 

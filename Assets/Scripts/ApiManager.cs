@@ -34,7 +34,6 @@ public class ApiManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-
     /// <summary>
     /// Safest login form in the west
     /// </summary>
@@ -83,6 +82,64 @@ public class ApiManager : MonoBehaviour
     }
 
     /// <summary>
+    /// add base
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask<string> GetUserBase(int playerId)
+    {
+        return await GetTextAsync(WebRequests.GetUsers + "/" + playerId + "/Base");
+    }
+
+    public void GetWorldSections(int worldId, System.Action<string> onDone)
+    {
+        StartCoroutine(GetText(WebRequests.Worlds + "/" + worldId + "/WorldSections", onDone));
+    }
+
+    public async UniTask<string> GetWorldSections(int worldId)
+    {
+        return await GetTextAsync(WebRequests.Worlds + "/" + worldId + "/WorldSections");
+    }
+
+    public async UniTask<string> GetWorldSection(int sectionId)
+    {
+        return await GetTextAsync(WebRequests.WorldSections + "/" + sectionId);
+    }
+
+    public async UniTask<string> CreateWorldSection(WorldSection worldSection)
+    {
+        Dictionary<string, string> form = new Dictionary<string, string>();
+
+        form.Add("worldPositionX", worldSection.worldPositionX.ToString());
+        form.Add("worldPositionY", worldSection.worldPositionY.ToString());
+        form.Add("world_id", worldSection.world_id.ToString());
+        form.Add("baseCount", 0.ToString());
+
+        return await GetTextAsync(WebRequests.WorldSections, form);
+    }
+
+    public void GetWorldsSync(System.Action<string> onDone)
+    {
+        StartCoroutine(GetText(WebRequests.Worlds, onDone));
+    }
+
+    public async UniTask<string> GetWorlds()
+    {
+        return await GetTextAsync(WebRequests.Worlds);
+    }
+
+    public void AddBaseSync(Base playerBase, System.Action<string> onDone)
+    {
+        Dictionary<string, string> form = new Dictionary<string, string>();
+
+        form.Add("localPositionX", playerBase.localPositionX.ToString());
+        form.Add("localPositionY", playerBase.localPositionY.ToString());
+        form.Add("client_id", playerBase.client_id.ToString());
+        form.Add("world_section_id", playerBase.world_section_id.ToString());
+
+        StartCoroutine(GetText(WebRequests.Bases, form, onDone));
+    }
+
+    /// <summary>
     /// delete base
     /// </summary>
     /// <returns></returns>
@@ -106,11 +163,10 @@ public class ApiManager : MonoBehaviour
 
         req.SetRequestHeader("Bearer", token != null ? token.access_token : string.Empty);
         req.SetRequestHeader("Username", token != null ? token.user.username : string.Empty);
-
         try
         {
             await req.SendWebRequest();
-
+ 
             if (req.result == UnityWebRequest.Result.Success)
             {
                 Console.Instance.Print($"{request} : {req.result}");
@@ -194,5 +250,71 @@ public class ApiManager : MonoBehaviour
         return false;
     }
 
+    public IEnumerator GetText(string request, System.Action<string> onDone)
+    {
+        if (onDone == null) yield break;
+        UnityWebRequest req = UnityWebRequest.Get(request);
 
+        req.SetRequestHeader("Bearer", token != null ? token.access_token : string.Empty);
+        req.SetRequestHeader("Username", token != null ? token.user.username : string.Empty);
+        try
+        {
+            req.SendWebRequest();
+            while (!req.isDone) ;
+        }
+        catch (UnityWebRequestException e)
+        {
+            Console.Instance.Print(request);
+            Console.Instance.Print(e.Text, "red");
+        }
+
+        if (req.result == UnityWebRequest.Result.Success)
+        {
+            Console.Instance.Print($"{request} : {req.result}");
+            Console.Instance.Print(req.downloadHandler.text, "green");
+
+            onDone.Invoke(req.downloadHandler.text);
+        }
+        else 
+        {
+            Console.Instance.Print($"{request} : {req.result}");
+            Console.Instance.Print(req.downloadHandler.text, "red");
+
+            onDone.Invoke(null);
+        }
+    }
+
+    public IEnumerator GetText(string request, Dictionary<string, string> form, System.Action<string> onDone)
+    {
+        if (onDone == null) yield break;
+        UnityWebRequest req = UnityWebRequest.Post(request, form);
+
+        req.SetRequestHeader("Bearer", token != null ? token.access_token : string.Empty);
+        req.SetRequestHeader("Username", token != null ? token.user.username : string.Empty);
+        try
+        {
+            req.SendWebRequest();
+            while (!req.isDone) ;
+        }
+        catch (UnityWebRequestException e)
+        {
+            Console.Instance.Print(request);
+            Console.Instance.Print(e.Text, "red");
+        }
+
+        if (req.result == UnityWebRequest.Result.Success)
+        {
+            Console.Instance.Print($"{request} : {req.result}");
+            Console.Instance.Print(req.downloadHandler.text, "green");
+
+            onDone.Invoke(req.downloadHandler.text);
+        }
+        else
+        {
+            Console.Instance.Print($"{request} : {req.result}");
+            Console.Instance.Print(req.downloadHandler.text, "red");
+
+            onDone.Invoke(null);
+        }
+    }
 }

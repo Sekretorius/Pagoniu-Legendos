@@ -79,13 +79,18 @@ public class Map : MonoBehaviour
 
     public async UniTask GetBases()
     {
-        string gameBases = await ApiManager.Instance.GetTextAsync(WebRequests.GetBases);
+        string gameBases = await ApiManager.Instance.GetTextAsync(WebRequests.Worlds + "/" + GameManager.Instance.currentWorld.id + "/" + "Bases");
         gameBases = JsonHelper.FixJson(gameBases);
         bases = JsonHelper.FromJson<Base>(gameBases); 
     }
 
     public void DisableIfHasBase()
     {
+        if (GameManager.Instance.playerBase != null)
+        {
+            createBtn.SetActive(false);
+            deleteBtn.SetActive(true);
+        }
         int id = ApiManager.Instance.token.user.id;
         foreach (Base pBase in Map.Instance.bases)
             if (pBase.client_id == id)
@@ -96,8 +101,8 @@ public class Map : MonoBehaviour
                 GameManager.Instance.playerBase = pBase;
                 return;
             }
-        createBtn.SetActive(true);
-        deleteBtn.SetActive(false);
+        createBtn.SetActive(false);
+        deleteBtn.SetActive(true);
     }
     public void CreateBase()
     {
@@ -114,6 +119,7 @@ public class Map : MonoBehaviour
         deleteBtn.SetActive(false);
         await ApiManager.Instance.DeleteBase(Map.Instance.playerBase.id);
         await RefreshBases();
+        GameManager.Instance.currentBase = null;
         DisableIfHasBase();
     }
 

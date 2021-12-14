@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using System.Threading.Tasks;
 public class AuthenticationManager : MonoBehaviour
 {
 
@@ -18,8 +18,14 @@ public class AuthenticationManager : MonoBehaviour
     [SerializeField]
     private TMP_InputField loginPassword = default;
 
+    [SerializeField]
+    private GameObject authenticateWindow;
+    [SerializeField]
+    private CreateBaseManager worldSelectionWidow;
+
     private void Awake()
     {
+        worldSelectionWidow.Hide();
         DontDestroyOnLoad(transform.parent);
     }
 
@@ -37,11 +43,9 @@ public class AuthenticationManager : MonoBehaviour
         }
 
         string result = await ApiManager.Instance.Login(loginUsername.text, loginPassword.text);
-
         if (result != null)
         {
-            await SceneManager.LoadSceneAsync(1,LoadSceneMode.Single);
-            gameObject.SetActive(false);
+            FinishPlayerSetUp();
         }
     }
 
@@ -62,8 +66,55 @@ public class AuthenticationManager : MonoBehaviour
 
         if (result != null)
         {
-            await SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
-            gameObject.SetActive(false);
+            FinishPlayerSetUp();
         }
     }
+
+    private async void FinishPlayerSetUp()
+    {
+        string result = await ApiManager.Instance.GetUserBase(ApiManager.Instance.token.user.id);
+        
+        if (result != null && result != "404")
+        {
+            try
+            {
+                Base playerBase = JsonUtility.FromJson<Base>(result);
+                GameManager.Instance.playerBase = playerBase;
+
+                string worldSectionResult = await ApiManager.Instance.GetWorldSection(playerBase.world_section_id);
+                if (worldSectionResult == null) return;
+
+                WorldSection worldSection = JsonUtility.FromJson<WorldSection>(worldSectionResult);
+                GameManager.Instance.currentWorld = new World() { id = worldSection.id };
+
+                if (playerBase != null)
+                {
+                    await SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
+                    gameObject.SetActive(false);
+                }
+            }
+            catch (System.Exception e)
+            {
+                Console.Instance.Print(e.Message, "red");
+            }
+        }
+        else
+        {
+            worldSelectionWidow.Init(() =>
+            {
+                authenticateWindow.SetActive(false);
+                worldSelectionWidow.Show(async (newBase) =>
+                {
+                    if (newBase != null)
+                    {
+                        GameManager.Instance.playerBase = newBase;
+                        await SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
+                        gameObject.SetActive(false);
+                    }
+                });
+            });
+        }
+    }
+
+
 }

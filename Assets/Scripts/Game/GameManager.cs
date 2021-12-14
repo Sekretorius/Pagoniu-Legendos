@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public World currentWorld;
+
     public Base playerBase;
 
     public Base currentBase;
@@ -27,5 +29,4 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(this);
     }
-
 }

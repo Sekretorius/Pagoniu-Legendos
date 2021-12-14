@@ -60,6 +60,11 @@ public class Console : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(buttonField.GetComponent<RectTransform>());
     }
 
+    public void SetStateConsole(bool state)
+    {
+        gameObject.SetActive(state);
+    }
+
     public void Print(string text, string color = "white")
     {
         text = $"<color={color}>{text}</color> \n";
