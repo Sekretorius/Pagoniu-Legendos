@@ -157,6 +157,17 @@ public class ApiManager : MonoBehaviour
         return await GetTextAsync(WebRequests.GetBase + baseId + "/Buildings");
     }
 
+    public async UniTask<string> AddBuilding(int baseId, string type)
+    {
+
+        Dictionary<string, string> form = new Dictionary<string, string>();
+
+        form.Add("base_id", baseId.ToString());
+        form.Add("type", type);
+
+        return await GetTextAsync(WebRequests.GetBase + baseId + "/Buildings",form);
+    }
+
     public async UniTask<string> GetTextAsync(string request)
     {
         UnityWebRequest req = UnityWebRequest.Get(request);

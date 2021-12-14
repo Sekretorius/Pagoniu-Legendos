@@ -89,7 +89,18 @@ public class Building
 
     public int health;
 
-    public Building() { }
+    public Building(int base_id, int localPositionX, int localPositionY, string type, string name, int price, int build_time, bool isBuilt, int health)
+    {
+        this.base_id = base_id;
+        this.localPositionX = localPositionX;
+        this.localPositionY = localPositionY;
+        this.type = type;
+        this.name = name;
+        this.price = price;
+        this.build_time = build_time;
+        this.isBuilt = isBuilt;
+        this.health = health;
+    }
 }
 
 public static class JsonHelper
