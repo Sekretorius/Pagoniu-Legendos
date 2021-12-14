@@ -31,7 +31,6 @@ public class Map : MonoBehaviour
             Instance = this;
 
         createBtn.SetActive(false);
-        deleteBtn.SetActive(false);
     }
 
     // Start is called before the first frame update
@@ -111,8 +110,8 @@ public class Map : MonoBehaviour
                 GameManager.Instance.playerBase = pBase;
                 return;
             }
-        createBtn.SetActive(false);
-        deleteBtn.SetActive(true);
+        createBtn.SetActive(true);
+        deleteBtn.SetActive(false);
     }
     public void CreateBase()
     {
@@ -131,6 +130,7 @@ public class Map : MonoBehaviour
         await ApiManager.Instance.DeleteBase(Map.Instance.playerBase.id);
         await RefreshBases();
         GameManager.Instance.playerBase = null;
+        createBtn.SetActive(true);
         //DisableIfHasBase();
     }
 
@@ -147,6 +147,7 @@ public class Map : MonoBehaviour
         await RefreshBases();
         //DisableIfHasBase();
         openCityBtn.SetActive(true);
+        deleteBtn.SetActive(true);
     }
 
     public async UniTask RefreshBases()

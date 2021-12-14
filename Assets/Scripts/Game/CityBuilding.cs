@@ -36,6 +36,7 @@ public class CityBuilding : MonoBehaviour
             PlayerCity.Instance.delBtn.gameObject.SetActive(false);
             PlayerCity.Instance.editBtn.gameObject.SetActive(false);
             PlayerCity.Instance.addBtn.gameObject.SetActive(false);
+            PlayerCity.Instance.deletePeopleBtn.gameObject.SetActive(false);
             PlayerCity.Instance.buyBtnText.text = "BUILD " + buildingName.ToUpper();
             PlayerCity.Instance.selected = this;
             PlayerCity.Instance.edit.SetActive(true);
