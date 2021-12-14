@@ -50,11 +50,11 @@ public class Base
 
     public int world_section_id;
 
-    public int localPositionX = 0;
+    public float localPositionX = 0;
 
-    public int localPositionY = 0;
+    public float localPositionY = 0;
 
-    public Base(int id, int client_id, int world_section_id, int localPositinionX, int localPositinionY)
+    public Base(int id, int client_id, int world_section_id, float localPositinionX, float localPositinionY)
     {
         this.id = id;
         this.client_id = client_id;

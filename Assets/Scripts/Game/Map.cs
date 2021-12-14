@@ -72,16 +72,13 @@ public class Map : MonoBehaviour
 
         for (int i = 0; i < bases.Length; i++)
         {
-            if (bases[i].localPositionX != 0 && bases[i].localPositionY != 0)
+            GameObject cityObject = Instantiate(cityPrefab, cities.transform, false);
+            cityObject.transform.localPosition = new Vector3((float)bases[i].localPositionX, (float)bases[i].localPositionY);
+            cityObject.GetComponent<City>().cityBase = bases[i];
+            if (bases[i].client_id == playerBase.client_id)
             {
-                GameObject cityObject = Instantiate(cityPrefab, cities.transform, false);
-                cityObject.transform.localPosition = new Vector3((float)bases[i].localPositionX, (float)bases[i].localPositionY);
-                cityObject.GetComponent<City>().cityBase = bases[i];
-                if (bases[i].client_id == playerBase.client_id)
-                {
-                    openCityBtn.SetActive(true);
-                    cityObject.GetComponent<City>().SetPlayer();
-                }
+                openCityBtn.SetActive(true);
+                cityObject.GetComponent<City>().SetPlayer();
             }
         }
     }
@@ -129,15 +126,15 @@ public class Map : MonoBehaviour
         openCityBtn.SetActive(false);
         await ApiManager.Instance.DeleteBase(Map.Instance.playerBase.id);
         await RefreshBases();
-        GameManager.Instance.currentBase = null;
+        GameManager.Instance.playerBase = null;
         DisableIfHasBase();
     }
 
     public async UniTask InitNewBase()
     {
         Bounds bounds = Map.Instance.bounds;
-        int x = Mathf.RoundToInt(Random.Range(-bounds.extents.x, bounds.extents.x));
-        int y = Mathf.RoundToInt(Random.Range(-bounds.extents.y, bounds.extents.y));
+        float x = Random.Range(-bounds.extents.x, bounds.extents.x);
+        float y = Random.Range(-bounds.extents.y, bounds.extents.y);
 
         Base playerBase = new Base(0, ApiManager.Instance.token.user.id, 1, x, y);
 

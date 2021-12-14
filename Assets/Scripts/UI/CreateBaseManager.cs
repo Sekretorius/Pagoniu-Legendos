@@ -84,7 +84,7 @@ public class CreateBaseManager : MonoBehaviour
                 world_id = world.id,
             };
             string worldSectionResult = await ApiManager.Instance.CreateWorldSection(newWorldSection);
-            selectedSection = newWorldSection;
+            selectedSection = JsonUtility.FromJson<WorldSection>(worldSectionResult);
             if (worldSectionResult == null)
             {
                 onSubmit.Invoke(null);
@@ -93,8 +93,8 @@ public class CreateBaseManager : MonoBehaviour
         }
         else selectedSection = worldSections[UnityEngine.Random.Range(0, worldSections.Length)];
 
-        int posX = UnityEngine.Random.Range(selectedSection.worldPositionX - 1, selectedSection.worldPositionX + 2);
-        int posY = UnityEngine.Random.Range(selectedSection.worldPositionY - 1, selectedSection.worldPositionY + 2);
+        float posX = UnityEngine.Random.Range(selectedSection.worldPositionX - 1, selectedSection.worldPositionX + 2);
+        float posY = UnityEngine.Random.Range(selectedSection.worldPositionY - 1, selectedSection.worldPositionY + 2);
 
         Base playerBase = new Base(0, ApiManager.Instance.token.user.id, selectedSection.id, posX, posY);
         string baseCreationResult = await ApiManager.Instance.AddBase(playerBase);
