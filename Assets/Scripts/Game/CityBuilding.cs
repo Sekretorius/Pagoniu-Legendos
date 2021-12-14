@@ -27,6 +27,9 @@ public class CityBuilding : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (GameManager.Instance.playerBase.client_id != GameManager.Instance.currentBase.client_id)
+            return;
+
         if (!sprite.enabled)
         {
             PlayerCity.Instance.buyBtn.gameObject.SetActive(true);

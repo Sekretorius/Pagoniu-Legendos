@@ -125,8 +125,8 @@ public class PlayerCity : SerializedMonoBehaviour
 
     public async UniTask AddPlayerBuilding()
     {
-        await ApiManager.Instance.AddBuilding(GameManager.Instance.currentBase.id, selected.buildingName, PlayerCity.instance.editText.text);
-
+        selected.EnableBuilding();
+        await ApiManager.Instance.AddBuilding(GameManager.Instance.currentBase.id, selected.buildingName, editText.text);
         string buildingData = await ApiManager.Instance.GetBuildings(GameManager.Instance.currentBase.id);
         buildingData = JsonHelper.FixJson(buildingData);
         buildings = JsonHelper.FromJson<Building>(buildingData);
@@ -144,8 +144,8 @@ public class PlayerCity : SerializedMonoBehaviour
 
     public async UniTask DeletePlayerBuilding()
     {
+        selected.DisableBuilding();
         await ApiManager.Instance.DeleteBuilding(GameManager.Instance.currentBase.id, selected.building.id);
-
         string buildingData = await ApiManager.Instance.GetBuildings(GameManager.Instance.currentBase.id);
         buildingData = JsonHelper.FixJson(buildingData);
         buildings = JsonHelper.FromJson<Building>(buildingData);

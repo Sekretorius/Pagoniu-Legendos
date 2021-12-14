@@ -8,7 +8,9 @@ using UnityEngine.SceneManagement;
 public class City : MonoBehaviour
 {
 
-    [SerializeField] private SpriteRenderer sprite;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Sprite basicSprite;
+    [SerializeField] private Sprite playerSprite;
     [SerializeField] private Vector2 position;
 
     [SerializeField] public Base cityBase;
@@ -37,12 +39,17 @@ public class City : MonoBehaviour
         try { GameManager.Instance.soldiers = JsonHelper.FromJson<Soldier>(JsonHelper.FixJson(soldierData))[0]; }
         catch { }
 
-        await SceneManager.LoadSceneAsync(2, LoadSceneMode.Single);
+        SceneManager.LoadScene(2, LoadSceneMode.Single);
     }
 
     private void OnMouseDown()
     {
         OpenCity();
+    }
+
+    public void SetPlayer()
+    {
+        spriteRenderer.sprite = playerSprite;
     }
 
 }
