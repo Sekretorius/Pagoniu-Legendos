@@ -26,8 +26,8 @@ public class World
 public class WorldSection
 {
     public int id;
-    public int worldPositionX;
-    public int worldPositionY;
+    public float worldPositionX;
+    public float worldPositionY;
     public int world_id;
 }
 

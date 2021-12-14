@@ -7129,7 +7129,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc8b6b31f42c1a745b8e59abec7609f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxSectionBaseCount: 3
   dropdown: {fileID: 1554431515}
+  bounds: {x: 5, y: 5}
+  baseOffset: 0.5
+  sectionDistance: 1
 --- !u!1 &1976089049
 GameObject:
   m_ObjectHideFlags: 0

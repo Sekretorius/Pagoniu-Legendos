@@ -85,7 +85,7 @@ public class AuthenticationManager : MonoBehaviour
                 if (worldSectionResult == null) return;
 
                 WorldSection worldSection = JsonUtility.FromJson<WorldSection>(worldSectionResult);
-                GameManager.Instance.currentWorld = new World() { id = worldSection.id };
+                GameManager.Instance.currentWorld = new World() { id = worldSection.world_id };
 
                 if (playerBase != null)
                 {
