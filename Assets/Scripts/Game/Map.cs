@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Map : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class Map : MonoBehaviour
 
     [SerializeField] private GameObject createBtn;
     [SerializeField] private GameObject deleteBtn;
+
+    [SerializeField] private GameObject openCityBtn;
 
     [SerializeField] public GameObject cities;
     [SerializeField] public GameObject cityPrefab;
@@ -31,6 +34,7 @@ public class Map : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        openCityBtn.SetActive(false);
         Init();
     }
 
@@ -54,7 +58,7 @@ public class Map : MonoBehaviour
             elapsedTime += Time.deltaTime;
             _camera.orthographicSize = Mathf.Lerp(size, orthoSize, elapsedTime / zoomTime);
             yield return null;
-        }     
+        }
     }
 
     public void SpawnCities()
@@ -73,6 +77,11 @@ public class Map : MonoBehaviour
                 GameObject cityObject = Instantiate(cityPrefab, cities.transform, false);
                 cityObject.transform.localPosition = new Vector3((float)bases[i].localPositionX, (float)bases[i].localPositionY);
                 cityObject.GetComponent<City>().cityBase = bases[i];
+                if (bases[i].client_id == playerBase.client_id)
+                {
+                    openCityBtn.SetActive(true);
+                    cityObject.GetComponent<City>().SetPlayer();
+                }
             }
         }
     }
@@ -117,6 +126,7 @@ public class Map : MonoBehaviour
     public async UniTask DeletePlayerBase()
     {
         deleteBtn.SetActive(false);
+        openCityBtn.SetActive(false);
         await ApiManager.Instance.DeleteBase(Map.Instance.playerBase.id);
         await RefreshBases();
         GameManager.Instance.currentBase = null;
@@ -135,12 +145,44 @@ public class Map : MonoBehaviour
         await ApiManager.Instance.AddBase(playerBase);
         await RefreshBases();
         DisableIfHasBase();
+        openCityBtn.SetActive(true);
     }
 
     public async UniTask RefreshBases()
     {
         await Map.Instance.GetBases();
         Map.Instance.SpawnCities();
+    }
+    public async UniTask OpenCity()
+    {
+
+        string buildingData = await ApiManager.Instance.GetBuildings(playerBase.id);
+        buildingData = JsonHelper.FixJson(buildingData);
+        Building[] building = JsonHelper.FromJson<Building>(buildingData);
+        GameManager.Instance.buildings = building;
+
+        string citizenData = await ApiManager.Instance.GetCitizens(playerBase.id);
+
+        string workerData = await ApiManager.Instance.GetWorkers(playerBase.id);
+
+        string soldierData = await ApiManager.Instance.GetSoldiers(playerBase.id);
+
+        try { GameManager.Instance.citizens = JsonHelper.FromJson<Citizen>(JsonHelper.FixJson(citizenData))[0]; }
+        catch { }
+
+        try { GameManager.Instance.workers = JsonHelper.FromJson<Worker>(JsonHelper.FixJson(workerData))[0]; }
+        catch { }
+
+        try { GameManager.Instance.soldiers = JsonHelper.FromJson<Soldier>(JsonHelper.FixJson(soldierData))[0]; }
+        catch { }
+
+        SceneManager.LoadScene(2, LoadSceneMode.Single);
+    }
+
+    public void OpenPlayerCity()
+    {
+        GameManager.Instance.currentBase = playerBase;
+        OpenCity();
     }
 
 }

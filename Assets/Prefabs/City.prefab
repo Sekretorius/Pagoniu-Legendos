@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3108909689682393336}
   - component: {fileID: 3108909689682393335}
   - component: {fileID: 613834683737591293}
-  - component: {fileID: 9190795468864690384}
+  - component: {fileID: 4117350423008934490}
   m_Layer: 0
   m_Name: City
   m_TagString: Untagged
@@ -96,7 +96,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d20028376639de42a8caa6286e29e3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprite: {fileID: 3108909689682393335}
+  spriteRenderer: {fileID: 3108909689682393335}
+  basicSprite: {fileID: 21300000, guid: d4931c2fe24918548816ad5b00dcf8e6, type: 3}
+  playerSprite: {fileID: 21300000, guid: 8eb204e52e54bb347acf42517dfc9a6e, type: 3}
   position: {x: 0, y: 0}
   cityBase:
     id: 0
@@ -104,7 +106,7 @@ MonoBehaviour:
     world_section_id: 0
     localPositionX: 0
     localPositionY: 0
---- !u!61 &9190795468864690384
+--- !u!61 &4117350423008934490
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

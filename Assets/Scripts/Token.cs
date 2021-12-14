@@ -71,6 +71,8 @@ public class Base
 [Serializable]
 public class Building
 {
+    public int id;
+
     public int base_id;
 
     public int localPositionX = 0;
@@ -83,14 +85,15 @@ public class Building
 
     public int price;
 
-    public int build_time;
+    public string build_time;
 
-    public bool isBuilt;
+    public int isBuilt;
 
     public int health;
 
-    public Building(int base_id, int localPositionX, int localPositionY, string type, string name, int price, int build_time, bool isBuilt, int health)
+    public Building(int id,int base_id, int localPositionX, int localPositionY, string type, string name, int price, string build_time, int isBuilt, int health)
     {
+        this.id = id;
         this.base_id = base_id;
         this.localPositionX = localPositionX;
         this.localPositionY = localPositionY;
@@ -101,6 +104,38 @@ public class Building
         this.isBuilt = isBuilt;
         this.health = health;
     }
+}
+
+[Serializable]
+public class Citizen
+{
+    public int id;
+    public int base_id;
+    public int count;
+    public int health;
+}
+
+[Serializable]
+public class Worker
+{
+    public int id;
+    public int base_id;
+    public int count;
+    public int health;
+}
+
+[Serializable]
+public class Soldier
+{
+    public int id;
+    public int base_id;
+    public int count;
+    public int training_cost;
+    public string type;
+    public int damage;
+    public int attack_speed;
+    public int move_speed;
+    public int health;
 }
 
 public static class JsonHelper
