@@ -11,6 +11,10 @@ public class GameManager : MonoBehaviour
 
     public Building[] buildings;
 
+    public Citizen citizens;
+    public Worker workers;
+    public Soldier soldiers;
+
     private static GameManager instance;
     public static GameManager Instance
     {
