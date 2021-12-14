@@ -2671,6 +2671,26 @@ MonoBehaviour:
     localPositionX: 0
     localPositionY: 0
   buildings: []
+  citizens:
+    id: 0
+    base_id: 0
+    count: 0
+    health: 0
+  workers:
+    id: 0
+    base_id: 0
+    count: 0
+    health: 0
+  soldiers:
+    id: 0
+    base_id: 0
+    count: 0
+    training_cost: 0
+    type: 
+    damage: 0
+    attack_speed: 0
+    move_speed: 0
+    health: 0
 --- !u!4 &706867327
 Transform:
   m_ObjectHideFlags: 0
@@ -7992,6 +8012,7 @@ GameObject:
   - component: {fileID: 2967354277013710853}
   - component: {fileID: 5888786952444416615}
   - component: {fileID: 4134029706488589195}
+  - component: {fileID: 4134029706488589196}
   m_Layer: 5
   m_Name: DisableConsole
   m_TagString: Untagged
@@ -8016,10 +8037,27 @@ Canvas:
   m_OverrideSorting: 1
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 100
   m_TargetDisplay: 0
+--- !u!114 &4134029706488589196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4134029706488589194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 55
 --- !u!114 &5264710859477260093
 MonoBehaviour:
   m_ObjectHideFlags: 0
