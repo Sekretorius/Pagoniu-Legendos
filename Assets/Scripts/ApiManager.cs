@@ -103,12 +103,17 @@ public class ApiManager : MonoBehaviour
         return await GetTextAsync(WebRequests.GetBase + baseId + "/Citizens");
     }
 
+    public async UniTask<bool> DeleteCitizens(int id)
+    {
+        return await DeleteAsync(WebRequests.Prefix + "Citizens/"+ id);
+    }
+
     public async UniTask<string> AddCitizen(Citizen citizen)
     {
         string data = JsonUtility.ToJson(citizen, true);
         Dictionary<string, string> form = JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
         form.Remove("id");
-        return await GetTextAsync(WebRequests.Prefix + "/Citizens", form);
+        return await GetTextAsync(WebRequests.Prefix + "Citizens", form);
     }
 
     public async UniTask<string> UpdateCitizen(Citizen citizen)
@@ -116,13 +121,17 @@ public class ApiManager : MonoBehaviour
         string data = JsonUtility.ToJson(citizen, true);
         Dictionary<string, string> form = JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
         form.Remove("id");
-        return await PutAsync(WebRequests.Prefix + "/Citizens/" + citizen.id, form);
+        return await PutAsync(WebRequests.Prefix + "Citizens/" + citizen.id, form);
     }
     public async UniTask<string> GetWorkers(int baseId)
     {
         return await GetTextAsync(WebRequests.GetBase + baseId + "/Workers");
     }
 
+    public async UniTask<bool> DeleteWorkers(int id)
+    {
+        return await DeleteAsync(WebRequests.Prefix + "Workers/" + id);
+    }
     public async UniTask<string> AddWorkers(Worker worker)
     {
         string data = JsonUtility.ToJson(worker, true);
@@ -141,6 +150,11 @@ public class ApiManager : MonoBehaviour
     public async UniTask<string> GetSoldiers(int baseId)
     {
         return await GetTextAsync(WebRequests.GetBase + baseId + "/Soldiers");
+    }
+
+    public async UniTask<bool> DeleteSoldiers(int id)
+    {
+        return await DeleteAsync(WebRequests.Prefix + "Soldiers/" + id);
     }
 
     public async UniTask<string> AddSoldiers(Soldier soldiers)

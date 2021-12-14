@@ -51,9 +51,10 @@ public class CityBuilding : MonoBehaviour
             PlayerCity.Instance.edit.SetActive(true);
             PlayerCity.Instance.editText.text = building.name == null? ":)" : building.name;
 
-            if(customInfo != "")
+            if (customInfo != "")
             {
                 PlayerCity.Instance.addBtn.gameObject.SetActive(true);
+                PlayerCity.Instance.deletePeopleBtn.gameObject.SetActive(true);
                 string type = "CITIZEN";
                 switch (building.type)
                 {
@@ -65,9 +66,13 @@ public class CityBuilding : MonoBehaviour
                         break;
                 }
                 PlayerCity.Instance.addBtnText.text = "ADD " + type;
+                PlayerCity.Instance.deletePeopleBtnText.text = "DISCARD " + type;
             }
             else
+            {
                 PlayerCity.Instance.addBtn.gameObject.SetActive(false);
+                PlayerCity.Instance.deletePeopleBtn.gameObject.SetActive(false);
+            }
         }
     }
 

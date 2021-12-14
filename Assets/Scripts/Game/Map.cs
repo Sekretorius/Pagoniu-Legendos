@@ -13,6 +13,8 @@ public class Map : MonoBehaviour
     [SerializeField] private GameObject createBtn;
     [SerializeField] private GameObject deleteBtn;
 
+    [SerializeField] private GameObject openCityBtn;
+
     [SerializeField] public GameObject cities;
     [SerializeField] public GameObject cityPrefab;
     [SerializeField] public Bounds bounds;
@@ -32,6 +34,7 @@ public class Map : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        openCityBtn.SetActive(false);
         Init();
     }
 
@@ -55,7 +58,7 @@ public class Map : MonoBehaviour
             elapsedTime += Time.deltaTime;
             _camera.orthographicSize = Mathf.Lerp(size, orthoSize, elapsedTime / zoomTime);
             yield return null;
-        }     
+        }
     }
 
     public void SpawnCities()
@@ -75,7 +78,10 @@ public class Map : MonoBehaviour
                 cityObject.transform.localPosition = new Vector3((float)bases[i].localPositionX, (float)bases[i].localPositionY);
                 cityObject.GetComponent<City>().cityBase = bases[i];
                 if (bases[i].client_id == playerBase.client_id)
+                {
+                    openCityBtn.SetActive(true);
                     cityObject.GetComponent<City>().SetPlayer();
+                }
             }
         }
     }
@@ -115,6 +121,7 @@ public class Map : MonoBehaviour
     public async UniTask DeletePlayerBase()
     {
         deleteBtn.SetActive(false);
+        openCityBtn.SetActive(false);
         await ApiManager.Instance.DeleteBase(Map.Instance.playerBase.id);
         await RefreshBases();
         DisableIfHasBase();
@@ -132,6 +139,7 @@ public class Map : MonoBehaviour
         await ApiManager.Instance.AddBase(playerBase);
         await RefreshBases();
         DisableIfHasBase();
+        openCityBtn.SetActive(true);
     }
 
     public async UniTask RefreshBases()
@@ -167,6 +175,7 @@ public class Map : MonoBehaviour
 
     public void OpenPlayerCity()
     {
+        GameManager.Instance.currentBase = playerBase;
         OpenCity();
     }
 

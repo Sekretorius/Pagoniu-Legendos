@@ -613,6 +613,7 @@ MonoBehaviour:
   orthoSize: 7
   createBtn: {fileID: 6613155763592625318}
   deleteBtn: {fileID: 335383089}
+  openCityBtn: {fileID: 321879146}
   cities: {fileID: 1854617871}
   cityPrefab: {fileID: 3108909689682393337, guid: 989820b24a214ab44be081c754535f52, type: 3}
   bounds:

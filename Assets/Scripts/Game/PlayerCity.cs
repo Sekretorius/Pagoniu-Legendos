@@ -51,6 +51,12 @@ public class PlayerCity : SerializedMonoBehaviour
     public TextMeshProUGUI addBtnText;
 
     [SerializeField]
+    public Button deletePeopleBtn;
+
+    [SerializeField]
+    public TextMeshProUGUI deletePeopleBtnText;
+
+    [SerializeField]
     public InfoBox info;
 
     [SerializeField]
@@ -173,6 +179,32 @@ public class PlayerCity : SerializedMonoBehaviour
         RefreshBuildings();
     }
 
+    public void DeletePeople()
+    {
+        DeletePlayerPeople();
+    }
+
+    public async void DeletePlayerPeople()
+    {
+        string type = selected.building.type;
+        switch (type)
+        {
+            case "House":
+                await ApiManager.Instance.DeleteCitizens(citizens.id);
+                citizens.count = 0;
+                break;
+            case "Blacksmith":
+                await ApiManager.Instance.DeleteWorkers(workers.id);
+                workers.count = 0;
+                break;
+            case "Barracks":
+                await ApiManager.Instance.DeleteSoldiers(soldiers.id);
+                soldiers.count = 0;
+                break;
+        }
+        RefreshInfo();
+    }
+
     public void AddPeople()
     {
         AddPlayerPeople();
@@ -187,7 +219,7 @@ public class PlayerCity : SerializedMonoBehaviour
         switch (type)
         {
             case "House":
-                if (citizens == null)
+                if (citizens != null)
                 {
                     citizens.count += 10;
                     await ApiManager.Instance.AddCitizen(citizens);
@@ -200,7 +232,7 @@ public class PlayerCity : SerializedMonoBehaviour
                 }
                 break;
             case "Blacksmith":
-                if (workers == null)
+                if (workers != null)
                 {
                     workers.count += 10;
                     await ApiManager.Instance.AddWorkers(workers);
@@ -213,7 +245,7 @@ public class PlayerCity : SerializedMonoBehaviour
                 }
                 break;
             case "Barracks":
-                if (soldiers == null)
+                if (soldiers != null)
                 {
                     soldiers.count += 10;
                     await ApiManager.Instance.AddSoldiers(soldiers);
