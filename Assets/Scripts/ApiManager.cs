@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -19,7 +20,7 @@ public class ApiManager : MonoBehaviour
 
     private static ApiManager instance;
 
-
+    private NumberFormatInfo numberFormat = new NumberFormatInfo() { NumberDecimalSeparator = "." };
     public static ApiManager Instance
     {
         get
@@ -74,8 +75,8 @@ public class ApiManager : MonoBehaviour
     {
         Dictionary<string,string> form = new Dictionary<string, string>();
 
-        form.Add("localPositionX", playerBase.localPositionX.ToString());
-        form.Add("localPositionY", playerBase.localPositionY.ToString());
+        form.Add("localPositionX", playerBase.localPositionX.ToString(numberFormat));
+        form.Add("localPositionY", playerBase.localPositionY.ToString(numberFormat));
         form.Add("client_id", playerBase.client_id.ToString());
         form.Add("world_section_id", playerBase.world_section_id.ToString());
 
@@ -111,8 +112,10 @@ public class ApiManager : MonoBehaviour
     {
         Dictionary<string, string> form = new Dictionary<string, string>();
 
-        form.Add("worldPositionX", worldSection.worldPositionX.ToString());
-        form.Add("worldPositionY", worldSection.worldPositionY.ToString());
+
+
+        form.Add("worldPositionX", worldSection.worldPositionX.ToString(numberFormat));
+        form.Add("worldPositionY", worldSection.worldPositionY.ToString(numberFormat));
         form.Add("world_id", worldSection.world_id.ToString());
         form.Add("baseCount", 0.ToString());
 
@@ -133,8 +136,8 @@ public class ApiManager : MonoBehaviour
     {
         Dictionary<string, string> form = new Dictionary<string, string>();
 
-        form.Add("localPositionX", playerBase.localPositionX.ToString());
-        form.Add("localPositionY", playerBase.localPositionY.ToString());
+        form.Add("localPositionX", playerBase.localPositionX.ToString(numberFormat));
+        form.Add("localPositionY", playerBase.localPositionY.ToString(numberFormat));
         form.Add("client_id", playerBase.client_id.ToString());
         form.Add("world_section_id", playerBase.world_section_id.ToString());
 
@@ -167,17 +170,23 @@ public class ApiManager : MonoBehaviour
 
     public async UniTask<string> AddCitizen(Citizen citizen)
     {
-        string data = JsonUtility.ToJson(citizen, true);
-        Dictionary<string, string> form = JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
-        form.Remove("id");
+        Dictionary<string, string> form = new Dictionary<string, string>();
+        
+        form.Add("health", citizen.health.ToString());
+        form.Add("count", citizen.count.ToString());
+        form.Add("base_id", citizen.base_id.ToString());
+
         return await GetTextAsync(WebRequests.Prefix + "Citizens", form);
     }
 
     public async UniTask<string> UpdateCitizen(Citizen citizen)
     {
-        string data = JsonUtility.ToJson(citizen, true);
-        Dictionary<string, string> form = JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
-        form.Remove("id");
+        Dictionary<string, string> form = new Dictionary<string, string>();
+
+        form.Add("health", citizen.health.ToString());
+        form.Add("count", citizen.count.ToString());
+        form.Add("base_id", citizen.base_id.ToString());
+
         return await PutAsync(WebRequests.Prefix + "Citizens/" + citizen.id, form);
     }
     public async UniTask<string> GetWorkers(int baseId)
@@ -191,17 +200,23 @@ public class ApiManager : MonoBehaviour
     }
     public async UniTask<string> AddWorkers(Worker worker)
     {
-        string data = JsonUtility.ToJson(worker, true);
-        Dictionary<string, string> form = JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
-        form.Remove("id");
+        Dictionary<string, string> form = new Dictionary<string, string>();
+
+        form.Add("health", worker.health.ToString());
+        form.Add("count", worker.count.ToString());
+        form.Add("base_id", worker.base_id.ToString());
+
         return await GetTextAsync(WebRequests.Prefix + "/Workers", form);
     }
 
     public async UniTask<string> UpdateWorkers(Worker worker)
     {
-        string data = JsonUtility.ToJson(worker, true);
-        Dictionary<string, string> form = JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
-        form.Remove("id");
+        Dictionary<string, string> form = new Dictionary<string, string>();
+
+        form.Add("health", worker.health.ToString());
+        form.Add("count", worker.count.ToString());
+        form.Add("base_id", worker.base_id.ToString());
+
         return await PutAsync(WebRequests.Prefix + "/Workers/" + worker.id, form);
     }
     public async UniTask<string> GetSoldiers(int baseId)
@@ -216,37 +231,62 @@ public class ApiManager : MonoBehaviour
 
     public async UniTask<string> AddSoldiers(Soldier soldiers)
     {
-        string data = JsonUtility.ToJson(soldiers, true);
-        Dictionary<string, string> form = JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
-        form.Remove("id");
+        Dictionary<string, string> form = new Dictionary<string, string>();
+
+        form.Add("health", soldiers.health.ToString());
+        form.Add("count", soldiers.count.ToString());
+        form.Add("training_cost", soldiers.training_cost.ToString());
+        form.Add("type", soldiers.type.ToString());
+        form.Add("damage", soldiers.damage.ToString());
+        form.Add("attack_speed", soldiers.attack_speed.ToString());
+        form.Add("move_speed", soldiers.move_speed.ToString());
+        form.Add("base_id", soldiers.base_id.ToString());
+
         return await GetTextAsync(WebRequests.Prefix + "/Soldiers", form);
     }
 
     public async UniTask<string> UpdateSoldiers(Soldier soldiers)
     {
-        string data = JsonUtility.ToJson(soldiers, true);
-        Dictionary<string, string> form = JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
-        form.Remove("id");
+        Dictionary<string, string> form = new Dictionary<string, string>();
+
+        form.Add("health", soldiers.health.ToString());
+        form.Add("count", soldiers.count.ToString());
+        form.Add("training_cost", soldiers.training_cost.ToString());
+        form.Add("type", soldiers.type.ToString());
+        form.Add("damage", soldiers.damage.ToString());
+        form.Add("attack_speed", soldiers.attack_speed.ToString());
+        form.Add("move_speed", soldiers.move_speed.ToString());
+        form.Add("base_id", soldiers.base_id.ToString());
+
         return await PutAsync(WebRequests.Prefix + "/Soldiers/" + soldiers.id, form);
     }
 
     public async UniTask<string> AddBuilding(int baseId, string type, string name)
     {
-
         Dictionary<string, string> form = new Dictionary<string, string>();
 
         form.Add("base_id", baseId.ToString());
         form.Add("type", type);
         form.Add("name", name);
+        form.Add("build_time", DateTime.Now.ToString("yyyy-MM-dd H:mm:ss"));
 
         return await GetTextAsync(WebRequests.GetBase + baseId + "/Buildings",form);
     }
 
     public async UniTask<string> EditBuilding(Building built)
     {
-        built.build_time = DateTime.Now.ToString("yyyy-MM-dd H:mm:ss");
-        string data = JsonUtility.ToJson(built,true);
-        Dictionary<string, string> form = JsonConvert.DeserializeObject < Dictionary<string, string> >(data);
+        Dictionary<string, string> form = new Dictionary<string, string>();
+        
+        form.Add("localPositionX", built.localPositionX.ToString());
+        form.Add("localPositionY", built.localPositionY.ToString());
+        form.Add("type", built.type);
+        form.Add("name", built.name);
+        form.Add("price", built.price.ToString());
+        form.Add("build_time", DateTime.Now.ToString("yyyy-MM-dd H:mm:ss"));
+        form.Add("isBuilt", built.isBuilt.ToString());
+        form.Add("health", built.health.ToString());
+        form.Add("base_id", built.base_id.ToString());
+
         return await PutAsync(WebRequests.GetBase + built.base_id + "/Buildings/" + built.id, form);
     }
 

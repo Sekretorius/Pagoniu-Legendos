@@ -103,11 +103,13 @@ public class AuthenticationManager : MonoBehaviour
             worldSelectionWidow.Init(() =>
             {
                 authenticateWindow.SetActive(false);
-                worldSelectionWidow.Show(async (newBase) =>
+                worldSelectionWidow.Show(async (world, newBase) =>
                 {
-                    if (newBase != null)
+                    if (newBase != null && world != null)
                     {
                         GameManager.Instance.playerBase = newBase;
+                        GameManager.Instance.currentWorld = world;
+
                         await SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
                         gameObject.SetActive(false);
                     }

@@ -11,7 +11,7 @@ public class CreateBaseManager : MonoBehaviour
     private int maxSectionBaseCount = 1;
     [SerializeField]
     private TMP_Dropdown dropdown;
-    private Action<Base> onSubmit;
+    private Action<World, Base> onSubmit;
     private Action onInitDone;
     private List<World> worlds = new List<World>();
 
@@ -33,7 +33,7 @@ public class CreateBaseManager : MonoBehaviour
         SetUpOptions();
     }
 
-    public void Show(Action<Base> onSubmit)
+    public void Show(Action<World, Base> onSubmit)
     {
         this.onSubmit = onSubmit;
         gameObject.SetActive(true);
@@ -75,7 +75,7 @@ public class CreateBaseManager : MonoBehaviour
         string worldSectionsRequest = await ApiManager.Instance.GetWorldSections(world.id);
         if (worldSectionsRequest == null)
         {
-            onSubmit.Invoke(null);
+            onSubmit.Invoke(null, null);
             return;
         }
 
@@ -109,13 +109,11 @@ public class CreateBaseManager : MonoBehaviour
 
         if (baseCreationResult == null)
         {
-            onSubmit.Invoke(null);
+            onSubmit.Invoke(null, null);
             return;
         }
 
-        GameManager.Instance.currentWorld = world;
-
-        onSubmit.Invoke(playerBase);
+        onSubmit.Invoke(world, JsonUtility.FromJson<Base>(baseCreationResult));
     }
     private SectionFilterResult FilterWorldSections(WorldSection[] worldSections, Base[] worldBases)
     {
@@ -159,7 +157,7 @@ public class CreateBaseManager : MonoBehaviour
 
         if (worldSectionResult == null)
         {
-            onSubmit.Invoke(null);
+            onSubmit.Invoke(null, null);
             return null;
         }
 
