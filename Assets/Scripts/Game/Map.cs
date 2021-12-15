@@ -44,7 +44,7 @@ public class Map : MonoBehaviour
     {
         playerBase = GameManager.Instance.playerBase;
         await GetBases();
-        //DisableIfHasBase();
+        DisableIfHasBase();
         SpawnCities();
         StartCoroutine(ZoomIn());
     }
@@ -131,7 +131,7 @@ public class Map : MonoBehaviour
         await RefreshBases();
         GameManager.Instance.playerBase = null;
         createBtn.SetActive(true);
-        //DisableIfHasBase();
+        DisableIfHasBase();
     }
 
     public async UniTask InitNewBase()
@@ -145,7 +145,7 @@ public class Map : MonoBehaviour
         createBtn.SetActive(false);
         await ApiManager.Instance.AddBase(playerBase);
         await RefreshBases();
-        //DisableIfHasBase();
+        DisableIfHasBase();
         openCityBtn.SetActive(true);
         deleteBtn.SetActive(true);
     }
